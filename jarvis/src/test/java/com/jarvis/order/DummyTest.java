@@ -10,5 +10,10 @@ public class DummyTest {
 	public void test() {
 		fail("Not yet implemented");
 	}
+	
+	@Test
+	public void oneMoreFailingTest() {
+		fail();
+	}
 
 }
