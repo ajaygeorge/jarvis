@@ -49,8 +49,8 @@ public class MatchingEngineTest {
 		//WHEN
 		matchingEngine.match(orderBook);
 		//THEN
-		assertEquals(0, matchingEngine.getPendingBuyOrders());
-		assertEquals(0, matchingEngine.getPendingSellOrders());
+		assertEquals(0, orderBook.getPendingBuyOrders());
+		assertEquals(0, orderBook.getPendingSellOrders());
 		//Add one more assert for last matched orders
 	}
 

@@ -1,5 +1,6 @@
 package com.jarvis.matchingengine;
 
+import com.jarvis.order.Order;
 import com.jarvis.order.OrderBook;
 
 /**
@@ -10,15 +11,12 @@ import com.jarvis.order.OrderBook;
 public class MatchingEngine {
 
 	public void match(OrderBook orderBook) {
-		
+		Order buy = orderBook.getBuyQueue().poll();
+		Order sell = orderBook.getSellQueue().poll();
+		if (buy.getPrice().compareTo(sell.getPrice()) >= 0) {
+			System.out.println("Order matched at " + sell.getPrice());
+		}
 	}
 
-	public int getPendingBuyOrders() {
-		return 1;
-	}
-
-	public int getPendingSellOrders() {
-		return 1;
-	}
 
 }
