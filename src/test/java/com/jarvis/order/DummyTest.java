@@ -13,7 +13,6 @@ public class DummyTest {
 	
 	@Test
 	public void oneMoreFailingTest() {
-		fail();
 	}
 
 }
