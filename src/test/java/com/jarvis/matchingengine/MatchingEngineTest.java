@@ -29,22 +29,12 @@ public class MatchingEngineTest {
 	}
 
 	@Test
-	public void testSamePriceBidOfferOrders() {
+	public void testSameVolumeSamePriceBidOfferOrders() {
 		//Set up buyOrder
-		Order buyOrder = new Order();
-		buyOrder.setCurrencyPair("EUR/USD");
-		buyOrder.setOrderAction(OrderAction.BUY);
-		buyOrder.setOrderSource(OrderSource.CUSTOMER);
-		buyOrder.setPrice(BigDecimal.valueOf(1.3664));
-		buyOrder.setVolume(BigInteger.valueOf(1000*1000*10));
+		Order buyOrder = createOrder(BigDecimal.valueOf(1.3664), BigInteger.valueOf(1000*1000*10), OrderAction.BUY);
 		orderBook.submitOrder(buyOrder);
 		//Set up sellOrder
-		Order sellOrder = new Order();
-		sellOrder.setCurrencyPair("EUR/USD");
-		sellOrder.setOrderAction(OrderAction.SELL);
-		sellOrder.setOrderSource(OrderSource.CUSTOMER);
-		sellOrder.setPrice(BigDecimal.valueOf(1.3664));
-		sellOrder.setVolume(BigInteger.valueOf(1000*1000*10));
+		Order sellOrder = createOrder(BigDecimal.valueOf(1.3664), BigInteger.valueOf(1000*1000*10), OrderAction.SELL);
 		orderBook.submitOrder(sellOrder);
 		//WHEN
 		matchingEngine.match(orderBook);
@@ -54,4 +44,44 @@ public class MatchingEngineTest {
 		//Add one more assert for last matched orders
 	}
 
+	@Test
+	public void testSameVolumeBidGreaterThanOfferOrder() {
+		//Set up buyOrder
+		Order buyOrder = createOrder(BigDecimal.valueOf(1.3667), BigInteger.valueOf(1000*1000*10), OrderAction.BUY);
+		orderBook.submitOrder(buyOrder);
+		//Set up sellOrder
+		Order sellOrder = createOrder(BigDecimal.valueOf(1.3664), BigInteger.valueOf(1000*1000*10), OrderAction.SELL);
+		orderBook.submitOrder(sellOrder);
+		//WHEN
+		matchingEngine.match(orderBook);
+		//THEN
+		assertEquals(0, orderBook.getPendingBuyOrders());
+		assertEquals(0, orderBook.getPendingSellOrders());
+	}
+	
+	@Test
+	public void testSameVolumeBidLesserThanOfferOrder() {
+		//Set up buyOrder
+		Order buyOrder = createOrder(BigDecimal.valueOf(1.3661), BigInteger.valueOf(1000*1000*10), OrderAction.BUY);
+		orderBook.submitOrder(buyOrder);
+		//Set up sellOrder
+		Order sellOrder = createOrder(BigDecimal.valueOf(1.3664), BigInteger.valueOf(1000*1000*10), OrderAction.SELL);
+		orderBook.submitOrder(sellOrder);
+		//WHEN
+		matchingEngine.match(orderBook);
+		//THEN
+		assertEquals(1, orderBook.getPendingBuyOrders());
+		assertEquals(1, orderBook.getPendingSellOrders());
+	}
+	
+	private Order createOrder(BigDecimal price, BigInteger volume, OrderAction orderAction) {
+		Order buyOrder = new Order();
+		buyOrder.setCurrencyPair("EUR/USD");
+		buyOrder.setOrderAction(orderAction);
+		buyOrder.setOrderSource(OrderSource.CUSTOMER);
+		buyOrder.setPrice(price);
+		buyOrder.setVolume(volume);
+		return buyOrder;
+	}
+	
 }

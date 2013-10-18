@@ -11,12 +11,13 @@ import com.jarvis.order.OrderBook;
 public class MatchingEngine {
 
 	public void match(OrderBook orderBook) {
-		Order buy = orderBook.getBuyQueue().poll();
-		Order sell = orderBook.getSellQueue().poll();
+		Order buy = orderBook.getBuyQueue().peek();
+		Order sell = orderBook.getSellQueue().peek();
 		if (buy.getPrice().compareTo(sell.getPrice()) >= 0) {
 			System.out.println("Order matched at " + sell.getPrice());
+			orderBook.getBuyQueue().remove();
+			orderBook.getSellQueue().remove();
 		}
 	}
-
 
 }
