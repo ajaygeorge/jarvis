@@ -1,7 +1,7 @@
 package com.jarvis.order;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Order Book
@@ -12,22 +12,23 @@ import java.util.concurrent.BlockingQueue;
 public class OrderBook {
 
 	// Init impl of the queue. Probable replacement is a disruptor.
-	private BlockingQueue<Order> buyQueue = new ArrayBlockingQueue<Order>(100);
-	private BlockingQueue<Order> sellQueue = new ArrayBlockingQueue<Order>(100);
+	private SortedSet<Order> buyQueue = new TreeSet<>();
+	private SortedSet<Order> sellQueue = new TreeSet<>();
+	
 
 	public void submitOrder(Order order) throws OrderSubmitException {
 		if (order.getOrderAction() == OrderAction.BUY) {
-			getBuyQueue().offer(order);
+			getBuyQueue().add(order);
 		} else if (order.getOrderAction() == OrderAction.SELL) {
-			getSellQueue().offer(order);
+			getSellQueue().add(order);
 		}
 	}
 
-	public BlockingQueue<Order> getBuyQueue() {
+	public SortedSet<Order> getBuyQueue() {
 		return buyQueue;
 	}
 
-	public BlockingQueue<Order> getSellQueue() {
+	public SortedSet<Order> getSellQueue() {
 		return sellQueue;
 	}
 

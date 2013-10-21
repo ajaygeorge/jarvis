@@ -3,6 +3,8 @@ package com.jarvis.order;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.joda.time.DateTime;
+
 /**
  * Order POJO
  * 
@@ -16,6 +18,11 @@ public class Order {
 	private String currencyPair;
 	private OrderAction orderAction;
 	private OrderSource orderSource;
+	private DateTime orderTime;
+	
+	public Order () {
+		this.orderTime = new DateTime();
+	}
 	
 	public BigInteger getVolume() {
 		return volume;
@@ -46,6 +53,9 @@ public class Order {
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public DateTime getOrderTime() {
+		return orderTime;
 	}
 	
 }
