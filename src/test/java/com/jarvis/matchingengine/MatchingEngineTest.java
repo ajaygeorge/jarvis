@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Random;
 
 import org.junit.After;
 import org.junit.Before;
@@ -125,6 +126,28 @@ public class MatchingEngineTest {
 		matchingEngine.match(orderBook);
 		assertEquals(1,	orderBook.getPendingBuyOrders());
 		assertEquals(0, orderBook.getPendingSellOrders());
+	}
+
+	@Test
+	public void testPerformanceOfMultipleOrders() {
+		int numOfOrders = 10000;
+		for (int i=0;i<numOfOrders;i++) {
+			//Set up buyOrders
+			BigDecimal bidPrice = BigDecimal.valueOf(1.3664+(new Random().nextInt(100)*0.0001)).setScale(4,BigDecimal.ROUND_HALF_UP);
+			Order buyOrder = createBuyOrder(bidPrice, BigInteger.valueOf(1000*1000*(new Random().nextInt(10)+1)));
+			orderBook.submitOrder(buyOrder);
+			//Set up sellOrder
+			BigDecimal askPrice = BigDecimal.valueOf(1.3664+(new Random().nextInt(100)*.0001)).setScale(4,BigDecimal.ROUND_HALF_UP);
+			Order sellOrder = createSellOrder(askPrice, BigInteger.valueOf(1000*1000*(new Random().nextInt(10)+1)));
+			orderBook.submitOrder(sellOrder);
+		}
+		//WHEN
+		long start = System.nanoTime();
+		matchingEngine.match(orderBook);
+		long end = System.nanoTime();
+		System.out.println("Time taken for matching "+numOfOrders+" orders is " + (end-start)/Math.pow(10, 6) + " ms");
+		//assertEquals(1,	orderBook.getPendingBuyOrders());
+		//assertEquals(0, orderBook.getPendingSellOrders());
 	}
 
 	private Order createBuyOrder(BigDecimal price, BigInteger volume) {
