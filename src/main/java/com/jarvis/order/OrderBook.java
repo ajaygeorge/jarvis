@@ -1,5 +1,6 @@
 package com.jarvis.order;
 
+import java.math.BigInteger;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -38,5 +39,17 @@ public class OrderBook {
 
 	public int getPendingSellOrders() {
 		return getSellQueue().size();
+	}
+
+	public void status() {
+		System.out.println("Bids"); 
+		for (Order order : getBuyQueue()) {
+			System.out.println(order.getPrice() +"/" + order.getVolume().divide(BigInteger.valueOf(1000*1000)));
+		}
+		System.out.println("Offers");
+		System.out.println("-------------------------");
+		for (Order order : getSellQueue()) {
+			System.out.println(order.getPrice() +"/" + order.getVolume().divide(BigInteger.valueOf(1000*1000)));
+		}
 	}
 }
