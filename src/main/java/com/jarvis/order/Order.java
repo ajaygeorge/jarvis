@@ -57,5 +57,14 @@ public class Order {
 	public DateTime getOrderTime() {
 		return orderTime;
 	}
+
+	@Override
+	public String toString() {
+		return "Order [price=" + price + ", volume=" + volume
+				+ ", currencyPair=" + currencyPair + ", orderAction="
+				+ orderAction + ", orderSource=" + orderSource + ", orderTime="
+				+ orderTime + "]";
+	}
+	
 	
 }
