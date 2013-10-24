@@ -1,26 +1,23 @@
 package com.jarvis.simulator;
 
-import java.lang.management.ManagementFactory;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-
-import com.jarvis.order.Order;
 import com.jarvis.order.OrderAction;
+import com.jarvis.order.OrderProducer;
 import com.jarvis.order.OrderSource;
-import com.jarvis.simulator.jmx.OrderSimulatorAdmin;
-import com.jarvis.simulator.jmx.OrderSimulatorAdminMBean;
 
 public class OrderSimulator {
 	
 	
-	private final int SLEEP_TIME = 2;
+	private final int SLEEP_TIME = 1000;
+	
+	private final String EUR_USD = "EUR/USD";
+	private final String USD_JPY = "USD/JPY";
+	
+	
 	private final Random currencyRandomizer = new Random();    
 	private final Random orderTypeRandomizer = new Random();
 	private final Random priceRandomizer = new Random();
@@ -41,15 +38,18 @@ public class OrderSimulator {
 	private final List<Double> volumesForEURUSD = new ArrayList<Double>(4);
 	
 	private final NumberFormat priceNumberFormatter = NumberFormat.getInstance();
+	
+	private OrderProducer orderProducer = null;
 
-	public OrderSimulator() {
+	public OrderSimulator(OrderProducer orderProducer) {
 		init();
+		this.orderProducer = orderProducer;
 	}
 	
 	
 	private void init() {
-		availableCcyPairs.add("EUR/USD");
-		availableCcyPairs.add("USD/JPY");
+		availableCcyPairs.add(EUR_USD);
+		availableCcyPairs.add(USD_JPY);
 
 		orderTypes.add(OrderAction.BUY);
 		orderTypes.add(OrderAction.SELL);
@@ -98,49 +98,34 @@ public class OrderSimulator {
 		return 100000;
 	}
 	
-	private Order createOrderObject(String currencyPair, OrderAction orderAction, String price, Double volume) {
-		Order order = new Order();
-		order.setCurrencyPair(currencyPair);
-		order.setOrderAction(orderAction);
-		order.setOrderSource(OrderSource.LP);
-		order.setPrice(new BigDecimal(price));
-		order.setVolume(new BigInteger("0"));
-		return order;
-		
+	 
+	private void publishOrder(String currencyPair, OrderAction orderAction, double price, double volume) {		
+		long volumeInLong = Double.valueOf(volume).longValue();
+		orderProducer.publishOrder(currencyPair, orderAction, OrderSource.CUSTOMER, price, volumeInLong);				
 	}
 
-	public void testRandomData() throws InterruptedException  {
-		for(int i = 0 ; i < 200; i++) {
-			String currencyPair = getRandomCurrency();
-			OrderAction orderType = getRandomOrderType();
-			String price = null;     
-			double volume = 0.0;
-			if(currencyPair.equals("EUR/USD")) {
-				price = getRandomPriceForEURUSD();
-				volume = getRandomVolumeForEURUSD();
-			} else {
-				price = getRandomPriceForUSDJPY();
-				volume = getVolumeForUSDJPY();
-			}
-			Order order = createOrderObject(currencyPair, orderType, price, volume);
-			System.out.println(currencyPair + "--" + price + "-" + orderType + "-" + volume + "-" + order);
-			Thread.sleep(SLEEP_TIME);
+	public void generateRandomData() throws InterruptedException  {		
+		String currencyPair = getRandomCurrency();
+		OrderAction orderType = getRandomOrderType();
+		String price = null;     
+		double volume = 0.0;
+		if(currencyPair.equals(EUR_USD)) {
+			price = getRandomPriceForEURUSD();
+			volume = getRandomVolumeForEURUSD();
+		} else {
+			price = getRandomPriceForUSDJPY();
+			volume = getVolumeForUSDJPY();
 		}
+		publishOrder(currencyPair, orderType, Double.parseDouble(price), volume);
+		Thread.sleep(SLEEP_TIME);
 	}
 	
-	static public void main(String[] args) throws Exception {
-		OrderSimulator randomOrdersSimulator = new OrderSimulator();
-		
-		OrderSimulatorAdminMBean orderSimulatorAdminMBean = new OrderSimulatorAdmin(randomOrdersSimulator);
-		  MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
-	        ObjectName name = new ObjectName("OrderSimulator:type=Simulator"); 
-	        
-	        mbs.registerMBean(orderSimulatorAdminMBean, name); 
-	        
-	        Thread.currentThread().join();
-		// randomOrdersSimulator.testRandomData();
-
-	}   
+	public void submitBuyOrder(String currencyPair, double price, long volume) {
+		String priceAfterFormatting = priceNumberFormatter.format(price);		
+		publishOrder(currencyPair, OrderAction.BUY, Double.parseDouble(priceAfterFormatting), volume);
+	}
+	
+	   
 	
 
 

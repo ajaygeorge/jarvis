@@ -5,6 +5,8 @@ import java.math.BigInteger;
 
 import org.joda.time.DateTime;
 
+import com.lmax.disruptor.EventFactory;
+
 /**
  * Order POJO
  * 
@@ -66,5 +68,11 @@ public class Order {
 				+ orderTime + "]";
 	}
 	
+	
+	public final static EventFactory<Order> EVENT_FACTORY = new EventFactory<Order>() {
+        public Order newInstance() {
+            return new Order();
+        }
+    };
 	
 }

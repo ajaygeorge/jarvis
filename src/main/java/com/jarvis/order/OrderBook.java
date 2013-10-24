@@ -13,8 +13,8 @@ import java.util.TreeSet;
 public class OrderBook {
 
 	// Init impl of the queue. Probable replacement is a disruptor.
-	private SortedSet<Order> buyQueue = new TreeSet<>();
-	private SortedSet<Order> sellQueue = new TreeSet<>();
+	private SortedSet<Order> buyQueue = new TreeSet<Order>();
+	private SortedSet<Order> sellQueue = new TreeSet<Order>();
 	
 
 	public void submitOrder(Order order) throws OrderSubmitException {
