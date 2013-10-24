@@ -62,7 +62,7 @@ public class MonEventProcessor implements MonEventProcessorMBean {
 	
 	
 	@Override
-	public void printData() {
+	public void printStatsMonitorData() {
 		Set<Entry<String, OrderStats>> entrySet = orderStatsMap.entrySet();
 		System.out.println("CURRENCY_PAIR" + " ORDER_TYPE" + " TOTAL_ORDERS" + " SUCCESS_ORDERS" + " FAILURE_ORDERS" + " TOTAL_TIME_IN_MS" + " AVG TIME IN MS");
 		for(Entry<String, OrderStats> entry : entrySet) {			
