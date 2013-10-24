@@ -1,11 +1,7 @@
 package com.jarvis.deserializer;
 
 import java.nio.ByteBuffer;
-
-import com.integral.is.message.MarketRate;
-import com.integral.is.message.MarketRateC;
-import com.integral.is.message.MarketRateSerializer;
-import com.integral.is.message.V1MarketRateSerializer;
+ 
 
 /**
  * Created with IntelliJ IDEA.
