@@ -1,11 +1,7 @@
 package com.jarvis.monitor;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-
-
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OrderStatsMonitorImpl implements OrderStatsMonitor {
 	
@@ -16,8 +12,6 @@ public class OrderStatsMonitorImpl implements OrderStatsMonitor {
 	}
 	
 	private Logger monitorLogger = LogManager.getLogger("PERF_LOGGER");
-	
-	
 	 
 	@Override
 	public void monitorStats(String currencyPair, String orderType,
@@ -31,6 +25,5 @@ public class OrderStatsMonitorImpl implements OrderStatsMonitor {
            monitorLogger.info("CURRENCY_PAIR:" + currencyPair + " ORDER_TYPE:" + orderType + " IS_MATCHED:" + isSuccess + " TIME_IN_NANOS:" + timeInNanos);
            monDisruptorWrapper.publishSeqNumToDisruptor(seqNum);		
 	}
-
 
 }

@@ -3,8 +3,8 @@ package com.jarvis.matchingengine;
 import java.math.BigInteger;
 import java.util.SortedSet;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.jarvis.order.Order;
 import com.jarvis.order.OrderBook;
