@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<Configuration status="TRACE">
+ 
+  <Appenders>
+ 
+    
+    <RandomAccessFile name="quoteMessagesLogFile" 
+    				  fileName="C:\\integral\\logs\\quoteMessages.log" 
+                      immediateFlush="false" 
+                      append="true">
+      <PatternLayout>
+        <Pattern>%d %p  [%t]  %m %ex%n</Pattern>
+      </PatternLayout>
+    </RandomAccessFile>
+    
+    
+    <RandomAccessFile name="orderMessagesLogFile" 
+    				  fileName="C:\\integral\\logs\\orderMessages.log" 
+              		  immediateFlush="false" 
+              		  append="true">
+      <PatternLayout>
+		<Pattern>%d %p  [%t]  %m %ex%n</Pattern>
+      </PatternLayout>
+    </RandomAccessFile>
+    
+      <RandomAccessFile name="defaultLogger" 
+    				  fileName="C:\\integral\\logs\\logs.log" 
+              		  immediateFlush="false" 
+              		  append="true">
+      <PatternLayout>
+		<Pattern>%d %p  [%t]  %m %ex%n</Pattern>
+      </PatternLayout>
+    </RandomAccessFile>
+    
+     <RandomAccessFile name="perfLogFile" 
+    				  fileName="C:\\integral\\logs\\perf.log" 
+              		  immediateFlush="false" 
+              		  append="true">
+      <PatternLayout>
+		<Pattern>%d %p  [%t]  %m %ex%n</Pattern>
+      </PatternLayout>
+    </RandomAccessFile>
+    
+    
+  </Appenders>
+  <Loggers>
+    <!-- pattern layout actually uses location, so we need to include it -->
+    <AsyncLogger name="QUOTE_MESSAGES_LOGGER" level="trace" includeLocation="true">
+      <AppenderRef ref="quoteMessagesLogFile"/>
+    </AsyncLogger>
+    
+    <AsyncLogger name="ORDER_MESSAGES_LOGGER" level="trace" includeLocation="true">
+      <AppenderRef ref="orderMessagesLogFile"/>
+    </AsyncLogger>
+
+<AsyncLogger name="PERF_LOGGER" level="info" includeLocation="true">
+      <AppenderRef ref="perfLogFile"/>
+    </AsyncLogger>
+
+
+
+    
+    
+    <Root level="info" includeLocation="true">
+      <AppenderRef ref="defaultLogger"/>
+    </Root>
+  </Loggers>
+</Configuration>

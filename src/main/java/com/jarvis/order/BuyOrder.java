@@ -5,7 +5,7 @@ package com.jarvis.order;
  * @author Ajay George
  *
  */
-public class BuyOrder extends Order implements Comparable<BuyOrder> {
+public class BuyOrder extends Order  {
 
 	@Override
 	public OrderAction getOrderAction() {
@@ -19,19 +19,6 @@ public class BuyOrder extends Order implements Comparable<BuyOrder> {
 				+ getCurrencyPair() + ", OrderSource=" + getOrderSource()
 				+ ", Price=" + getPrice() + ", OrderTime="
 				+ getOrderTime() + "]";
-	}
-
-
-	@Override
-	public int compareTo(BuyOrder o) {
-		int compareTo = 0;
-		int priceComparator = super.getPrice().compareTo(o.getPrice());
-		if (priceComparator != 0 ) {
-			compareTo = priceComparator;
-		} else {
-			compareTo = super.getOrderTime().compareTo(o.getOrderTime());
-		}
-		return compareTo;
 	}
 	
 }

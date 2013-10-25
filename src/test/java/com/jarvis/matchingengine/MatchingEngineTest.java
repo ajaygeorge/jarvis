@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.jarvis.order.BuyOrder;
@@ -128,7 +129,7 @@ public class MatchingEngineTest {
 		assertEquals(0, orderBook.getPendingSellOrders());
 	}
 
-	@Test
+	@Ignore
 	public void testPerformanceOfMultipleOrders() {
 		int numOfOrders = 10000;
 		for (int i=0;i<numOfOrders;i++) {

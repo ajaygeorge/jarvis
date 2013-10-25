@@ -10,7 +10,7 @@ public class MonEvent {
 	
 	private boolean isSuccess;
 	
-	private long timeTakenInMillis;
+	private long timeTakenInNanos;
 
 	public MonEvent() {
 		super();
@@ -41,12 +41,12 @@ public class MonEvent {
 		this.isSuccess = isSuccess;
 	}
 
-	public long getTimeTakenInMillis() {
-		return timeTakenInMillis;
+	public long getTimeTakenInNanos() {
+		return timeTakenInNanos;
 	}
 
-	public void setTimeTakenInMillis(long timeTakenInMillis) {
-		this.timeTakenInMillis = timeTakenInMillis;
+	public void setTimeTakenInNanos(long timeTakenInNanos) {
+		this.timeTakenInNanos = timeTakenInNanos;
 	}
 	
 	 public final static EventFactory<MonEvent> EVENT_FACTORY = new EventFactory<MonEvent>() {

@@ -1,5 +1,7 @@
 package com.jarvis.simulator.jmx;
 
+import com.jarvis.order.OrderBook;
+import com.jarvis.quoteslistener.QuotesReceiver;
 import com.jarvis.simulator.OrderSimulator;
 
 public class OrderSimulatorAdmin implements OrderSimulatorAdminMBean {
@@ -9,10 +11,17 @@ public class OrderSimulatorAdmin implements OrderSimulatorAdminMBean {
 	private volatile boolean runSimulation= false;
 	
 	private final int SIMULATOR_RUN_CHECK_COUNT = 1000;
+
+	private OrderBook orderbook;
 	
-	public OrderSimulatorAdmin(OrderSimulator orderSimulator) {
+	private QuotesReceiver quotesReceiver = null;
+	
+	
+	public OrderSimulatorAdmin(OrderSimulator orderSimulator, OrderBook orderbook, QuotesReceiver quotesReceiver) {
 		super();
 		this.orderSimulator = orderSimulator;
+		this.orderbook = orderbook;
+		this.quotesReceiver = quotesReceiver;
 	}
 
 
@@ -42,5 +51,25 @@ public class OrderSimulatorAdmin implements OrderSimulatorAdminMBean {
 		orderSimulator.submitBuyOrder(currencyPair, price, volume);
 		return "ORDER_SUBMITTED";
 	}
+	
+	@Override
+	public String submitSellOrder(String currencyPair, double price, long volume) throws Exception {
+		orderSimulator.submitSellOrder(currencyPair, price, volume);
+		return "ORDER_SUBMITTED";
+	}
+
+
+	@Override
+	public void orderBookStatus() {
+		orderbook.status();
+	}
+
+
+	@Override
+	public void startListeningToQuotes() throws Exception {
+		quotesReceiver.createAndSetJMSMessageListeners();		
+	}
+	
+	
 
 }

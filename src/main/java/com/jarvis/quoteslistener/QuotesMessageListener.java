@@ -4,6 +4,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.integral.is.message.MarketPrice;
 import com.integral.is.message.MarketRate;
 import com.jarvis.deserializer.Deserializer;
@@ -18,16 +21,21 @@ public class QuotesMessageListener implements MessageListener {
 	
 	private OrderProducer orderProducer = null;
 	
+	private Logger quotesLogger = null;
+	
+	
 	public QuotesMessageListener(OrderProducer orderProducer, Deserializer deSerializer) {
 		this.orderProducer = orderProducer;
 		this.deSerializer = deSerializer;
+		this.quotesLogger = LogManager.getLogger("QUOTE_MESSAGES_LOGGER");
 	}
 	
 	@Override
 	public void onMessage(Message message) {
 		try {			
 			TextMessage quotesTextMessage = (TextMessage) message;		
-			String quoteString = quotesTextMessage.getText();								
+			String quoteString = quotesTextMessage.getText();			
+			log("QUOTE" + quoteString);
 			MarketRate marketRate = deserializeQuoteString(quoteString);	
 			convertQuotesToOrders(marketRate);
 		} catch(Exception e) {
@@ -73,7 +81,7 @@ public class QuotesMessageListener implements MessageListener {
 	
 
 	private void log(String message) {
-		System.out.println(message);
+		quotesLogger.info(message);
 	}
 
 }

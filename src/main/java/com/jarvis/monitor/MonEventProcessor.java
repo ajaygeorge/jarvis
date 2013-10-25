@@ -44,7 +44,7 @@ public class MonEventProcessor implements MonEventProcessorMBean {
 		String currencyPair = monEvent.getCurrencyPair();
 		String orderType = monEvent.getOrderType();
 		boolean isSuccess = monEvent.isSuccess();
-		long timeTakenInMillis = monEvent.getTimeTakenInMillis();
+		long timeTakenInMillis = monEvent.getTimeTakenInNanos();
 		String orderStatsMapKeyValue = currencyPair+"-"+orderType;
 		OrderStats stats = orderStatsMap.get(orderStatsMapKeyValue);		
 		if(stats == null) {
@@ -64,7 +64,7 @@ public class MonEventProcessor implements MonEventProcessorMBean {
 	@Override
 	public void printStatsMonitorData() {
 		Set<Entry<String, OrderStats>> entrySet = orderStatsMap.entrySet();
-		System.out.println("CURRENCY_PAIR" + " ORDER_TYPE" + " TOTAL_ORDERS" + " SUCCESS_ORDERS" + " FAILURE_ORDERS" + " TOTAL_TIME_IN_MS" + " AVG TIME IN MS");
+		System.out.println("CURRENCY_PAIR" + " ORDER_TYPE" + " TOTAL_ORDERS" + " MATCHED_ORDERS" + " NON_MATCHED_ORDERS" + " TOTAL_TIME_IN_NS" + " AVG TIME IN NS");
 		for(Entry<String, OrderStats> entry : entrySet) {			
 			OrderStats orderStats = entry.getValue();					
 			String currencyPair = orderStats.getCurrencyPair();
